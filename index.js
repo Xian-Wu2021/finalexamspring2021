@@ -66,6 +66,7 @@ app.post("/input", upload.single('filename'), async (req, res) => {
         msg: [],
         total: 0
     };
+    const totRecs = await dblib.getTotalRecords().totRecords;
 
     for (let i = 0; i < lines.length; i++) {
         line = lines[i];
@@ -73,8 +74,17 @@ app.post("/input", upload.single('filename'), async (req, res) => {
         continue;
         }
         book = line.split(",");
+        console.log(book);
+        book.forEach(entry => {
+            
+            if (entry == "Null") {
+                console.log(book);
+                entry = "null";
+            }
+        });
         const insertResult = await dblib.insertBook(book);
-        console.log(insertResult);
+        // console.log(insertResult);
+        
         if (insertResult.trans === 'success') {
         message.processed ++;
         message.inserted ++;
@@ -87,6 +97,8 @@ app.post("/input", upload.single('filename'), async (req, res) => {
             }
         }
     }
-    message.total = await dblib.getTotalRecords().totRecords;
+    message.total = totRecs + message.processed;
+    
+    console.log(message);
     res.send(message);
 }); 
