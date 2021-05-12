@@ -1,0 +1,54 @@
+<%- include("_header") -%>
+
+<h1>Calculate Sum of a Series</h1>
+
+<div class="form-group row">
+    <label class="col-form-label col-sm-2" for="starnumber">Enter Starting Number</label>
+    <div class="col-sm-8">
+        <input autofocus class="form-control" id="starnumber" required type="number" />
+    </div>
+    <td>(Required)</td> 
+</div>
+
+<div class="form-group row">
+    <label class="col-form-label col-sm-2" for="endnumber">Enter Ending Number</label>
+    <div class="col-sm-7">
+        <input class="form-control" id="endnumber" required type="number" />
+    </div>
+    <td>(Required)</td> 
+</div>
+
+<div class="form-group row">
+    <label class="col-form-label col-sm-2" for="increment">Enter Increment</label>
+    <div class="col-sm-7">
+        <input class="form-control" id="increment" required type="number"  />
+    </div>
+    <td>(Required)</td> 
+</div>
+<button onclick="sumFunc()">Click me</button>
+
+
+<div id="output"></div>
+
+<script>
+    function sumFunc () {
+        const starnumber = parseFloat(document.getElementById("starnumber").value);
+        const endnumber = parseFloat(document.getElementById("endnumber").value);
+        const increment = parseFloat(document.getElementById("increment").value);
+        const output = document.getElementById("output");
+
+        if (starnumber > endnumber) {
+            output.innerHTML = `<p><b style="color:Red">Ending number must be greater than starting number</b></p>`;
+            return;
+        }
+        let step = starnumber;
+        let result = 0;
+        while (step < endnumber) {
+            result += step;
+            step += increment;
+        }
+        output.innerHTML = `The sum of the numbers from ${starnumber} to ${endnumber} incremented by ${increment} is <b>${result}</b>`;
+    } 
+</script>
+
+<%- include("_footer") -%>

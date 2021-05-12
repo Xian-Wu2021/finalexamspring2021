@@ -1,0 +1,57 @@
+<%- include("_header") -%>
+
+<h1>Import Books</h1>
+<h4>Total number of books in the database: <%= totRecs %></h4>
+<h4>Select a file with books for Database Insert</h4>
+<form>
+    <input type="file" name="filename" required><p></p>
+    <input type="submit">
+</form>
+<p id="importSummary"></p>
+<p id="errorSummary"></p>
+
+<script>
+    // Typically, if the script is large, we place it in a separate file
+    //   For demonstrations, it is included in the same file.
+    // Handle form submission
+    document.querySelector("form").addEventListener("submit", e => {
+      // Cancel default behavior of sending a synchronous POST request
+      e.preventDefault();
+      // Create a FormData object, passing the form as a parameter
+      const formData = new FormData(e.target);
+      const importSummary = document.getElementById("importSummary");
+      importSummary.innerHTML = `<h2>Wait for results</h2>`;
+      // Send form data to the server with an asynchronous POST request
+      fetch("/input", {
+        method: "POST",
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+            const importSummary = document.getElementById("importSummary");
+            const errorSummary = document.getElementById("errorSummary");
+            importSummary.innerHTML = `
+                <h2>Import Summary</h2><br>
+                <p>Initial number of books in the database: <%= totRecs %></p>
+                <p>Records Processed: ${data.processed}</p>
+                <p>Books inserted successfully: ${data.inserted}</p>
+                <p>Resulting number of books in the database:!! <%= totRecs %>  ${data.inserted}</p><br>
+            `;
+            errorSummary.innerHTML = `
+                <h2>Error Summary</h2><br>
+                <p>Total books processed: ${data.processed}</p>
+                <p>Number of book not inserted: ${data.notInserted}</p>
+                <p><b>Detailed errors :</b> </p><br>       
+            `;
+            data.msg.forEach(errMsg => {
+                errorSummary.innerHTML += `${errMsg}<br>`;
+            });
+            
+        })
+        .catch(err => {
+            document.getElementById("message").textContent = `Error: ${err.message}`;
+        });
+    });
+</script>
+
+<%- include("_footer") -%>
