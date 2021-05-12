@@ -66,22 +66,21 @@ app.post("/input", upload.single('filename'), async (req, res) => {
         msg: [],
         total: 0
     };
-    const totRecs = await dblib.getTotalRecords().totRecords;
-
+    const totRecs = await dblib.getTotalRecords();
     for (let i = 0; i < lines.length; i++) {
         line = lines[i];
         if (line === '') {
         continue;
         }
         book = line.split(",");
-        console.log(book);
-        book.forEach(entry => {
+        // console.log(book);
+        // book.forEach(entry => {
             
-            if (entry == "Null") {
-                console.log(book);
-                entry = "null";
-            }
-        });
+        //     if (entry == "Null") {
+        //         console.log(book);
+        //         entry = "null";
+        //     }
+        // });
         const insertResult = await dblib.insertBook(book);
         // console.log(insertResult);
         
@@ -97,8 +96,6 @@ app.post("/input", upload.single('filename'), async (req, res) => {
             }
         }
     }
-    message.total = totRecs + message.processed;
-    
-    console.log(message);
+    message.total = parseFloat( totRecs.totRecords) + message.inserted;
     res.send(message);
 }); 

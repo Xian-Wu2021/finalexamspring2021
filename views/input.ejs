@@ -35,7 +35,7 @@
                 <p>Initial number of books in the database: <%= totRecs %></p>
                 <p>Records Processed: ${data.processed}</p>
                 <p>Books inserted successfully: ${data.inserted}</p>
-                <p>Resulting number of books in the database:  <%= totRecs %> + ${data.inserted}</p><br>
+                <p>Resulting number of books in the database: ${data.total}</p><br>
             `;
             if (data.notInserted === 0) {
                 errorSummary.innerHTML = "";
